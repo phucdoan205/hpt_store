@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using backend.DTOs.Cart;
+using backend.Models.Cart;
 
 namespace backend.Controllers
 {

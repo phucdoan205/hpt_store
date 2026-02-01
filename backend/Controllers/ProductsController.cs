@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using backend.DTOs.Products;
+using backend.Models.Products;
+
 
 namespace backend.Controllers
 {

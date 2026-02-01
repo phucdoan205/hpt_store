@@ -1,5 +1,8 @@
-public class MasterSize
+namespace backend.Models.Masters
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
+    public class MasterSize
+    {
+        public int Id { get; set; }
+        public required string Name { get; set; }
+    }
 }

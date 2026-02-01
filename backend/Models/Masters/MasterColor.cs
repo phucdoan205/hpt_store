@@ -1,6 +1,9 @@
-public class MasterColor
+namespace backend.Models.Masters
 {
-    public int Id { get; set; }
-    public string Name { get; set; }
-    public string HexCode { get; set; }
+    public class MasterColor
+    {
+        public int Id { get; set; }
+        public required string Name { get; set; }
+        public required string HexCode { get; set; }
+    }
 }

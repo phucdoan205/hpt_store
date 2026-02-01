@@ -1,7 +1,11 @@
-public class CreateOrderDto
+namespace backend.DTOs.Orders
 {
-    public string ShippingName { get; set; }
-    public string ShippingPhone { get; set; }
-    public string ShippingAddress { get; set; }
-    public string PaymentMethod { get; set; }
+    public class CreateOrderDto
+    {
+        public required string ShippingName { get; set; }
+        public required string ShippingPhone { get; set; }
+        public required string ShippingAddress { get; set; }
+        public required string PaymentMethod { get; set; }
+    }
+
 }
