@@ -22,41 +22,75 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="w-full max-w-md border border-[#0A1F44] p-8 rounded-xl">
-        <h2 className="text-2xl font-bold text-center mb-6 text-[#0A1F44]">
+      {/* KHUNG */}
+      <div className="w-full max-w-md border-2 border-blue-700 p-8 rounded-xl">
+        
+        {/* TIÊU ĐỀ */}
+        <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">
           Đăng nhập
         </h2>
 
         <form onSubmit={submit} className="flex flex-col gap-4">
+          
           {/* EMAIL */}
           <input
             type="email"
             placeholder="Email"
-            className="w-full border border-[#0A1F44] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0A1F44]"
+            className="
+              w-full
+              border-2 border-blue-700
+              rounded-lg
+              px-4 py-2
+              text-blue-700
+              placeholder-blue-700/60
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-700
+            "
             onChange={(e) => setEmail(e.target.value)}
+            required
           />
 
           {/* PASSWORD */}
           <input
             type="password"
             placeholder="Mật khẩu"
-            className="w-full border border-[#0A1F44] rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#0A1F44]"
+            className="
+              w-full
+              border-2 border-blue-700
+              rounded-lg
+              px-4 py-2
+              text-blue-700
+              placeholder-blue-700/60
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-700
+            "
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
 
-          {/* BUTTON LOGIN */}
+          {/* LOGIN BUTTON */}
           <button
             type="submit"
-            className="w-full mt-2 bg-[#0A1F44] hover:bg-[#081833] text-white font-semibold py-2 rounded-lg transition"
+            className="
+              w-full
+              mt-2
+              !bg-blue-700
+              !text-white
+              font-semibold
+              py-2
+              rounded-lg
+              border-2
+              border-blue-700
+            "
           >
             Đăng nhập
           </button>
         </form>
 
         {/* GOOGLE LOGIN */}
-        <div className="mt-4">
           <GoogleLoginButton />
-        </div>
       </div>
     </div>
   );
