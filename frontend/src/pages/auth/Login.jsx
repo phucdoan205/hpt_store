@@ -27,7 +27,7 @@ export default function Login() {
         
         {/* TIÊU ĐỀ */}
         <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">
-          Đăng nhập
+          ĐĂNG NHẬP
         </h2>
 
         <form onSubmit={submit} className="flex flex-col gap-4">
@@ -87,8 +87,7 @@ export default function Login() {
           >
             Đăng nhập
           </button>
-        </form>
-
+        </form>        
         {/* GOOGLE LOGIN */}
           <GoogleLoginButton />
       </div>

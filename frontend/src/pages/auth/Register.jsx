@@ -34,63 +34,135 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="w-full max-w-md border p-6 rounded shadow">
-        <h2 className="text-2xl font-bold mb-4 text-center">
-          Đăng ký tài khoản
+      {/* KHUNG NGOÀI */}
+      <div className="w-full max-w-md border-2 border-blue-700 p-8 rounded-xl">
+
+        {/* TITLE */}
+        <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">
+          ĐĂNG KÝ TÀI KHOẢN
         </h2>
 
-        <form onSubmit={submit} className="space-y-3">
+        <form onSubmit={submit} className="flex flex-col gap-4">
+
+          {/* USERNAME */}
           <input
             name="username"
             placeholder="Tên người dùng"
-            className="w-full border p-2 rounded"
+            className="
+              w-full
+              border-2 border-blue-700
+              rounded-lg
+              px-4 py-2
+              text-blue-700
+              placeholder-blue-700/60
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-700
+            "
             onChange={handleChange}
             required
           />
 
+          {/* EMAIL */}
           <input
             name="email"
             type="email"
             placeholder="Email"
-            className="w-full border p-2 rounded"
+            className="
+              w-full
+              border-2 border-blue-700
+              rounded-lg
+              px-4 py-2
+              text-blue-700
+              placeholder-blue-700/60
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-700
+            "
             onChange={handleChange}
             required
           />
 
+          {/* PASSWORD */}
           <input
             name="password"
             type="password"
             placeholder="Mật khẩu"
-            className="w-full border p-2 rounded"
+            className="
+              w-full
+              border-2 border-blue-700
+              rounded-lg
+              px-4 py-2
+              text-blue-700
+              placeholder-blue-700/60
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-700
+            "
             onChange={handleChange}
             required
           />
 
+          {/* CONFIRM PASSWORD */}
           <input
             name="confirmPassword"
             type="password"
             placeholder="Nhập lại mật khẩu"
-            className="w-full border p-2 rounded"
+            className="
+              w-full
+              border-2 border-blue-700
+              rounded-lg
+              px-4 py-2
+              text-blue-700
+              placeholder-blue-700/60
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-700
+            "
             onChange={handleChange}
             required
           />
 
+          {/* ADDRESS */}
           <textarea
             name="address"
             placeholder="Địa chỉ"
-            className="w-full border p-2 rounded"
             rows={2}
+            className="
+              w-full
+              border-2 border-blue-700
+              rounded-lg
+              px-4 py-2
+              text-blue-700
+              placeholder-blue-700/60
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-700
+            "
             onChange={handleChange}
           />
 
-          <button className="w-full bg-black text-white py-2 rounded hover:opacity-90">
+          {/* REGISTER BUTTON */}
+          <button
+            type="submit"
+            className="
+              w-full
+              mt-2
+              bg-blue-700
+              text-white
+              font-semibold
+              py-2
+              rounded-lg
+            "
+          >
             Đăng ký
           </button>
         </form>
 
-        <p className="text-center mt-4">
+        {/* LOGIN LINK */}
+        <p className="text-center mt-4 text-blue-700">
           Đã có tài khoản?{" "}
-          <Link to="/login" className="text-blue-600">
+          <Link to="/login" className="font-semibold underline">
             Đăng nhập
           </Link>
         </p>
