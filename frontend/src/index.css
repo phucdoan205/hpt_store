@@ -67,3 +67,24 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+.sidebar {
+  width: 260px;
+  height: 100vh;
+  background-color: #1f2a3a; /* nền xanh đậm */
+  border-right: 1px solid #e5e7eb; /* đường kẻ dọc bên phải */
+}
+.sidebar a {
+  display: block;
+  padding: 14px 20px;
+  color: #ffffff; /* chữ trắng */
+  text-decoration: none;
+  font-size: 16px;
+}
+.sidebar a.active {
+  background-color: #ffffff; /* nền trắng full */
+  color: #2563eb;           /* xanh giống trang đăng nhập */
+  border-radius: 0;         /* bỏ bo góc để full khung */
+}
+.sidebar a:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
