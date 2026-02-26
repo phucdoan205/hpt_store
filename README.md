@@ -20,13 +20,11 @@
  
  + Cấu hình Database: Mở file appsettings.json, dán chuỗi kết nối Supabase vào mục DefaultConnection (như đã thống nhất trong nhóm).
  + Chạy dự án: dotnet run
- API sẽ chạy tại: https://localhost:7xxx/swagger
 
  2. Cấu hình Front-end (React)
  -  Mở Terminal tại thư mục /frontend:
  + Cài đặt thư viện: npm install
  + Chạy dự án: npm run dev
- + Website sẽ chạy tại: http://localhost:5173🚀 
 
  3. Quy trình cập nhật Database (Migration)
  - Khi bạn thêm Bảng mới hoặc Trường dữ liệu mới trong code C#, hãy thực hiện các lệnh sau tại thư mục /backend:
