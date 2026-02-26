@@ -29,7 +29,5 @@ public class AppDbContext : DbContext
         b.Entity<User>().ToTable("Users");
         b.Entity<Product>().ToTable("Products");
         b.Entity<Order>().ToTable("Orders");
-        b.Entity<MasterSize>().ToTable("MasterSizes");
-        b.Entity<MasterColor>().ToTable("MasterColors");
     }
 }
