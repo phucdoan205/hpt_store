@@ -1,0 +1,41 @@
+🛒 HPT STORE
+
+ - Dự án Website Bán hàng Thời trangDự án cuối kỳ môn Phát triển Hệ thống Web, sử dụng mô hình Decoupled (Tách biệt Front-end và Back-end).
+
+ 🏢 Sơ lược dự án
+ + Back-end: .NET 8 Web API, Entity Framework Core.
+ + Front-end: React (Vite), Tailwind CSS, Material UI.
+ + Database: PostgreSQL (Host trên Supabase).
+ + Tính năng chính: Quản lý sản phẩm, giỏ hàng, thanh toán, phân quyền Admin/Staff, Chatbot hỗ trợ.
+
+ * 🛠 Hướng dẫn cài đặt khi Clone dự án
+ - Sau khi clone repo về máy, bạn thực hiện các bước sau:
+
+ 1. Cấu hình Back-end (.NET)
+ + Mở Terminal tại thư mục /backend:
+ + Cài đặt thư viện:
+ dotnet restore
+ dotnet add package Npgsql.EntityFrameworkCore.PostgreSQL
+ dotnet add package Microsoft.EntityFrameworkCore.Design
+ 
+ + Cấu hình Database: Mở file appsettings.json, dán chuỗi kết nối Supabase vào mục DefaultConnection (như đã thống nhất trong nhóm).
+ + Chạy dự án: dotnet run
+ API sẽ chạy tại: https://localhost:7xxx/swagger
+
+ 2. Cấu hình Front-end (React)
+ -  Mở Terminal tại thư mục /frontend:
+ + Cài đặt thư viện: npm install
+ + Chạy dự án: npm run dev
+ + Website sẽ chạy tại: http://localhost:5173🚀 
+
+ 3. Quy trình cập nhật Database (Migration)Khi bạn thêm Bảng mới hoặc Trường dữ liệu mới trong code C#, hãy thực hiện các lệnh sau tại thư mục /backend:
+
+ + Bước 1: Tạo bản ghi thay đổi (Migration)Thay Ten_Migration bằng nội dung bạn vừa sửa (ví dụ: AddPhoneToUser).Bashdotnet ef migrations add Ten_Migration
+ + Bước 2: Đẩy dữ liệu lên SupabaseLệnh này sẽ cập nhật trực tiếp cấu trúc bảng lên Database online.dotnet ef database update
+
+ * Lưu ý: Nếu bạn chưa cài công cụ EF Core, hãy chạy: dotnet tool install --global dotnet-ef trước.
+
+ 📦 Các thư viện quan trọng đã dùng
+ - Thành phần: 
+ + Back-end : Npgsql.EntityFrameworkCore.PostgreSQL, AutoMapper, Microsoft.AspNetCore.Authentication.JwtBearer
+ + Front-end : react-router-dom, @mui/material, @mui/icons-material, lucide-react, axios
