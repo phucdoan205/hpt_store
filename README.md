@@ -28,12 +28,23 @@
  + Chạy dự án: npm run dev
  + Website sẽ chạy tại: http://localhost:5173🚀 
 
- 3. Quy trình cập nhật Database (Migration)Khi bạn thêm Bảng mới hoặc Trường dữ liệu mới trong code C#, hãy thực hiện các lệnh sau tại thư mục /backend:
+ 3. Quy trình cập nhật Database (Migration)
+ - Khi bạn thêm Bảng mới hoặc Trường dữ liệu mới trong code C#, hãy thực hiện các lệnh sau tại thư mục /backend:
 
- + Bước 1: Tạo bản ghi thay đổi (Migration)Thay Ten_Migration bằng nội dung bạn vừa sửa (ví dụ: AddPhoneToUser).Bashdotnet ef migrations add Ten_Migration
- + Bước 2: Đẩy dữ liệu lên SupabaseLệnh này sẽ cập nhật trực tiếp cấu trúc bảng lên Database online.dotnet ef database update
+ + Bước 1: Tạo bản ghi thay đổi (Migration):dotnet ef migrations add Ten_Migration (thay Ten_Migration bằng nội dung bạn vừa sửa (ví dụ: AddPhoneToUser) ) 
+ + Bước 2: Đẩy dữ liệu lên Supabase. Lệnh này sẽ cập nhật trực tiếp cấu trúc bảng lên Database online: dotnet ef database update
 
  * Lưu ý: Nếu bạn chưa cài công cụ EF Core, hãy chạy: dotnet tool install --global dotnet-ef trước.
+
+ 4. Quy trình chuẩn cho nhóm 3 người khi làm việc với Migration:
+ 
+ - Để không bị lỗi "đè" nhau, nhóm bạn nên làm theo các bước sau:
+ + Người A (Lead): Thay đổi Model -> Chạy dotnet ef migrations add -> Push cả code Model và thư mục Migrations lên Git.
+
+ + Người B & C: git pull để lấy code và file Migration của Người A về máy mình.
+ Gõ lệnh: dotnet ef database update.
+
+ Lưu ý: Người B và C không được gõ lệnh add migration nữa, vì file đã có sẵn rồi, chỉ cần chạy lệnh update để nó cập nhật vào Database thôi.
 
  📦 Các thư viện quan trọng đã dùng
  - Thành phần: 
