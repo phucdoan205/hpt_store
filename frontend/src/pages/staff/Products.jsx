@@ -10,10 +10,18 @@ export default function Products() {
   const sizes = ["S", "M", "L", "XL", "XXL"];
   const [selectedSizes, setSelectedSizes] = useState([]);
 
+  const resetForm = () => {
+  setImages([]);
+  setHasColor(false);
+  setHasSize(false);
+  setSelectedSizes([]);
+};
+
   /* ================= IMAGE ================= */
 
   const handleUpload = (e) => {
     const files = Array.from(e.target.files);
+
     const preview = files.map((file) => ({
       file,
       url: URL.createObjectURL(file),
@@ -35,6 +43,16 @@ export default function Products() {
         : [...prev, size]
     );
   };
+
+  /* ================= INPUT STYLE ================= */
+
+  const inputStyle =
+    "w-full border-2 border-gray-300 rounded-lg p-2 mt-1 " +
+    "text-black bg-white placeholder-gray-400 " +
+    "focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600";
+
+  const checkboxStyle =
+    "w-4 h-4 accent-blue-600 cursor-pointer";
 
   return (
     <div className="p-6">
@@ -61,7 +79,9 @@ export default function Products() {
       {/* ================= OVERLAY ================= */}
       {open && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-          <div className="bg-white w-[900px] rounded-2xl p-8 shadow-xl">
+
+          {/* ✅ KHUNG CÓ SCROLL */}
+          <div className="bg-white w-[900px] max-h-[90vh] overflow-y-auto rounded-2xl p-8 shadow-xl">
 
             <div className="grid grid-cols-2 gap-8">
 
@@ -75,14 +95,16 @@ export default function Products() {
                   type="file"
                   multiple
                   onChange={handleUpload}
-                  className="mb-4"
+                  className="mb-4 border p-2 rounded-lg w-full text-black"
                 />
 
-                <div className="grid grid-cols-3 gap-3">
+                {/* ✅ KHUNG ẢNH CÓ SCROLL */}
+                <div className="grid grid-cols-3 gap-3 max-h-[350px] overflow-y-auto pr-2">
                   {images.map((img, index) => (
                     <div key={index} className="relative">
                       <img
                         src={img.url}
+                        alt=""
                         className="w-full h-24 object-cover rounded-lg border"
                       />
 
@@ -108,7 +130,7 @@ export default function Products() {
                   <input
                     type="text"
                     placeholder="Nhập tên sản phẩm..."
-                    className="w-full border rounded-lg p-2 mt-1"
+                    className={inputStyle}
                   />
                 </div>
 
@@ -119,54 +141,61 @@ export default function Products() {
                   </label>
                   <input
                     type="number"
-                    className="w-full border rounded-lg p-2 mt-1"
+                    placeholder="Nhập giá sản phẩm..."
+                    className={inputStyle}
                   />
                 </div>
 
                 {/* COLOR */}
-                <label className="flex items-center gap-2">
+                <label className="flex items-center gap-2 text-gray-700 font-medium">
                   <input
                     type="checkbox"
                     checked={hasColor}
                     onChange={() => setHasColor(!hasColor)}
+                    className={checkboxStyle}
                   />
-                  Có màu sắc
+                  Màu
                 </label>
 
                 {hasColor && (
                   <input
                     placeholder="Nhập màu (vd: Đen, Trắng...)"
-                    className="w-full border rounded-lg p-2"
+                    className={inputStyle}
                   />
                 )}
 
                 {/* SIZE */}
-                <label className="flex items-center gap-2">
+                <label className="flex items-center gap-2 text-gray-700 font-medium">
                   <input
                     type="checkbox"
                     checked={hasSize}
                     onChange={() => setHasSize(!hasSize)}
+                    className={checkboxStyle}
                   />
-                  Có size
+                  Size
                 </label>
 
                 {hasSize && (
                   <div className="flex gap-2 flex-wrap">
-                    {sizes.map((size) => (
-                      <button
-                        key={size}
-                        onClick={() => toggleSize(size)}
-                        type="button"
-                        className={`px-3 py-1 rounded-lg border
-                        ${
-                          selectedSizes.includes(size)
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-100"
-                        }`}
-                      >
-                        {size}
-                      </button>
-                    ))}
+                    {sizes.map((size) => {
+                      const active = selectedSizes.includes(size);
+
+                      return (
+                        <button
+                          key={size}
+                          type="button"
+                          onClick={() => toggleSize(size)}
+                          className={`px-4 py-1 rounded-lg border-2 transition
+                          ${
+                            active
+                              ? "bg-blue-600 text-white border-blue-600"
+                              : "bg-gray-100 text-gray-700 border-gray-300 hover:border-blue-400"
+                          }`}
+                        >
+                          {size}
+                        </button>
+                      );
+                    })}
                   </div>
                 )}
 
@@ -177,7 +206,8 @@ export default function Products() {
                   </label>
                   <textarea
                     rows={4}
-                    className="w-full border rounded-lg p-2 mt-1"
+                    placeholder="Nhập mô tả sản phẩm..."
+                    className={inputStyle}
                   />
                 </div>
 
@@ -186,23 +216,21 @@ export default function Products() {
 
             {/* BUTTONS */}
             <div className="flex justify-end gap-4 mt-8">
-
-              {/* SAVE */}
-              <button
-                className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-semibold"
-              >
+              <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-semibold">
                 Lưu
               </button>
 
-              {/* CANCEL */}
               <button
-                onClick={() => setOpen(false)}
+                onClick={() => {
+                  resetForm();
+                  setOpen(false);
+                }}
                 className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-xl font-semibold"
               >
                 Huỷ
               </button>
-
             </div>
+
           </div>
         </div>
       )}
