@@ -42,6 +42,7 @@ export default function App() {
             </ProtectedRoute>
           }
         >
+          <Route path="products" element={<Products />} />
           <Route index element={<AdminDashboard />} />
           <Route path="employees" element={<Employees />} />
           <Route path="revenue" element={<Revenue />} />

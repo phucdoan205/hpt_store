@@ -16,6 +16,8 @@ export default function AdminLayout() {
 
         {/* MENU */}
         <nav className="flex flex-col">
+
+          {/* Tổng quan */}
           <NavLink
             to="/admin"
             end
@@ -30,6 +32,35 @@ export default function AdminLayout() {
             Tổng quan
           </NavLink>
 
+          {/* ✅ Sản phẩm (FIX chữ thường) */}
+          <NavLink
+            to="/admin/products"
+            className={({ isActive }) =>
+              `${menuItem} ${
+                isActive
+                  ? "bg-white text-blue-700 font-semibold"
+                  : "text-white"
+              }`
+            }
+          >
+            Sản phẩm
+          </NavLink>
+
+          {/* ✅ Doanh thu */}
+          <NavLink
+            to="/admin/revenue"
+            className={({ isActive }) =>
+              `${menuItem} ${
+                isActive
+                  ? "bg-white text-blue-700 font-semibold"
+                  : "text-white"
+              }`
+            }
+          >
+            Doanh thu
+          </NavLink>
+
+          {/* ✅ Nhân viên */}
           <NavLink
             to="/admin/employees"
             className={({ isActive }) =>
@@ -43,18 +74,6 @@ export default function AdminLayout() {
             Nhân viên
           </NavLink>
 
-          <NavLink
-            to="/admin/revenue"
-            className={({ isActive }) =>
-              `${menuItem} ${
-                isActive
-                  ? "bg-white text-blue-700 font-semibold"
-                  : "text-white"
-              }`
-            }
-          >
-            Doanh thu
-          </NavLink>
         </nav>
       </aside>
 
