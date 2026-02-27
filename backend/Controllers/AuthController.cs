@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
+using backend.DTOs.Auth;
+using backend.Models.Users;
+
 
 namespace backend.Controllers
 {
@@ -30,6 +33,9 @@ namespace backend.Controllers
                 PasswordHash = HashPassword(dto.Password),
                 Email = dto.Email,
                 FullName = dto.FullName,
+                PhoneNumber = dto.PhoneNumber,
+                AvatarUrl = dto.AvatarUrl,
+
                 Role = "User",
                 CreatedAt = DateTime.UtcNow
             };

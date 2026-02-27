@@ -1,20 +1,11 @@
-using backend.Models.Masters;
-
-namespace backend.Models.Products
+namespace backend.DTOs.Products
 {
-    public class ProductVariant
+    public class ProductVariantDto
     {
         public int Id { get; set; }
-
         public int ProductId { get; set; }
-        public Product Product { get; set; }
-
         public int ColorId { get; set; }
-        public MasterColor Color { get; set; }
-
         public int SizeId { get; set; }
-        public MasterSize Size { get; set; }
-
         public required string Sku { get; set; }
         public int Quantity { get; set; }
         public decimal PriceModifier { get; set; }
