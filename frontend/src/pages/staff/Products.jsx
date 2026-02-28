@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 
 export default function Products() {
   const [open, setOpen] = useState(false);
@@ -10,12 +11,38 @@ export default function Products() {
   const sizes = ["S", "M", "L", "XL", "XXL"];
   const [selectedSizes, setSelectedSizes] = useState([]);
 
+  /* ================= PRODUCT FORM ================= */
+
+  const [form, setForm] = useState({
+    name: "",
+    description: "",
+    price: "",
+    categoryId: "",
+    color: "",
+  });
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  /* ================= RESET ================= */
+
   const resetForm = () => {
-  setImages([]);
-  setHasColor(false);
-  setHasSize(false);
-  setSelectedSizes([]);
-};
+    setImages([]);
+    setHasColor(false);
+    setHasSize(false);
+    setSelectedSizes([]);
+    setForm({
+      name: "",
+      description: "",
+      price: "",
+      categoryId: "",
+      color: "",
+    });
+  };
 
   /* ================= IMAGE ================= */
 
@@ -44,15 +71,52 @@ export default function Products() {
     );
   };
 
-  /* ================= INPUT STYLE ================= */
+  /* ================= SAVE PRODUCT ================= */
+
+  const handleSave = async () => {
+    try {
+      const formData = new FormData();
+
+      formData.append("Name", form.name);
+      formData.append(
+        "Slug",
+        form.name.toLowerCase().replace(/\s+/g, "-")
+      );
+      formData.append("Description", form.description);
+      formData.append("Price", form.price);
+      formData.append("CategoryId", form.categoryId);
+
+      // chỉ lấy ảnh đầu làm thumbnail
+      if (images.length > 0) {
+        formData.append("ThumbnailFile", images[0].file);
+      }
+
+      await axios.post(
+        "https://localhost:5001/api/products",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      alert("✅ Tạo sản phẩm thành công");
+
+      resetForm();
+      setOpen(false);
+    } catch (err) {
+      console.error(err);
+      alert("❌ Lỗi tạo sản phẩm");
+    }
+  };
+
+  /* ================= STYLE ================= */
 
   const inputStyle =
-    "w-full border-2 border-gray-300 rounded-lg p-2 mt-1 " +
-    "text-black bg-white placeholder-gray-400 " +
-    "focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600";
+    "w-full border-2 border-gray-300 rounded-lg p-2 mt-1 text-black bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600";
 
-  const checkboxStyle =
-    "w-4 h-4 accent-blue-600 cursor-pointer";
+  const checkboxStyle = "w-4 h-4 accent-blue-600 cursor-pointer";
 
   return (
     <div className="p-6">
@@ -70,7 +134,7 @@ export default function Products() {
         </button>
       </div>
 
-      {/* LIST DEMO */}
+      {/* DEMO LIST */}
       <ul className="bg-white rounded-xl shadow p-4 space-y-2">
         <li>Áo thun</li>
         <li>Giày</li>
@@ -79,13 +143,11 @@ export default function Products() {
       {/* ================= OVERLAY ================= */}
       {open && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-
-          {/* ✅ KHUNG CÓ SCROLL */}
           <div className="bg-white w-[900px] max-h-[90vh] overflow-y-auto rounded-2xl p-8 shadow-xl">
 
             <div className="grid grid-cols-2 gap-8">
 
-              {/* LEFT — IMAGE */}
+              {/* IMAGE */}
               <div>
                 <h3 className="font-semibold mb-3 text-gray-700">
                   Hình ảnh
@@ -98,13 +160,11 @@ export default function Products() {
                   className="mb-4 border p-2 rounded-lg w-full text-black"
                 />
 
-                {/* ✅ KHUNG ẢNH CÓ SCROLL */}
-                <div className="grid grid-cols-3 gap-3 max-h-[350px] overflow-y-auto pr-2">
+                <div className="grid grid-cols-3 gap-3 max-h-[350px] overflow-y-auto">
                   {images.map((img, index) => (
                     <div key={index} className="relative">
                       <img
                         src={img.url}
-                        alt=""
                         className="w-full h-24 object-cover rounded-lg border"
                       />
 
@@ -119,35 +179,49 @@ export default function Products() {
                 </div>
               </div>
 
-              {/* RIGHT — FORM */}
+              {/* FORM */}
               <div className="space-y-4">
 
-                {/* NAME */}
                 <div>
-                  <label className="block font-semibold text-gray-700">
+                  <label className="font-semibold text-gray-700">
                     Tên sản phẩm
                   </label>
                   <input
-                    type="text"
-                    placeholder="Nhập tên sản phẩm..."
+                    name="name"
+                    value={form.name}
+                    onChange={handleChange}
                     className={inputStyle}
                   />
                 </div>
 
-                {/* PRICE */}
                 <div>
-                  <label className="block font-semibold text-gray-700">
+                  <label className="font-semibold text-gray-700">
                     Giá
                   </label>
                   <input
                     type="number"
-                    placeholder="Nhập giá sản phẩm..."
+                    name="price"
+                    value={form.price}
+                    onChange={handleChange}
+                    className={inputStyle}
+                  />
+                </div>
+
+                <div>
+                  <label className="font-semibold text-gray-700">
+                    CategoryId
+                  </label>
+                  <input
+                    type="number"
+                    name="categoryId"
+                    value={form.categoryId}
+                    onChange={handleChange}
                     className={inputStyle}
                   />
                 </div>
 
                 {/* COLOR */}
-                <label className="flex items-center gap-2 text-gray-700 font-medium">
+                <label className="flex gap-2 text-gray-700">
                   <input
                     type="checkbox"
                     checked={hasColor}
@@ -159,13 +233,15 @@ export default function Products() {
 
                 {hasColor && (
                   <input
-                    placeholder="Nhập màu (vd: Đen, Trắng...)"
+                    name="color"
+                    value={form.color}
+                    onChange={handleChange}
                     className={inputStyle}
                   />
                 )}
 
                 {/* SIZE */}
-                <label className="flex items-center gap-2 text-gray-700 font-medium">
+                <label className="flex gap-2 text-gray-700">
                   <input
                     type="checkbox"
                     checked={hasSize}
@@ -185,11 +261,10 @@ export default function Products() {
                           key={size}
                           type="button"
                           onClick={() => toggleSize(size)}
-                          className={`px-4 py-1 rounded-lg border-2 transition
-                          ${
+                          className={`px-4 py-1 rounded-lg border-2 ${
                             active
                               ? "bg-blue-600 text-white border-blue-600"
-                              : "bg-gray-100 text-gray-700 border-gray-300 hover:border-blue-400"
+                              : "bg-gray-100 text-gray-700"
                           }`}
                         >
                           {size}
@@ -199,14 +274,15 @@ export default function Products() {
                   </div>
                 )}
 
-                {/* DESCRIPTION */}
                 <div>
-                  <label className="block font-semibold text-gray-700">
-                    Mô tả sản phẩm
+                  <label className="font-semibold text-gray-700">
+                    Mô tả
                   </label>
                   <textarea
                     rows={4}
-                    placeholder="Nhập mô tả sản phẩm..."
+                    name="description"
+                    value={form.description}
+                    onChange={handleChange}
                     className={inputStyle}
                   />
                 </div>
@@ -214,9 +290,12 @@ export default function Products() {
               </div>
             </div>
 
-            {/* BUTTONS */}
+            {/* BUTTON */}
             <div className="flex justify-end gap-4 mt-8">
-              <button className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-semibold">
+              <button
+                onClick={handleSave}
+                className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-xl font-semibold"
+              >
                 Lưu
               </button>
 

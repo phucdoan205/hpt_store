@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using backend.DTOs.Products;
 using backend.Models.Products;
-
+using backend.Services;
 
 namespace backend.Controllers
 {
@@ -13,11 +13,16 @@ namespace backend.Controllers
     {
         private readonly AppDbContext _db;
         private readonly IMapper _mapper;
+        private readonly SupabaseStorageService _storage;
 
-        public ProductsController(AppDbContext db, IMapper mapper)
+        public ProductsController(
+            AppDbContext db,
+            IMapper mapper,
+            SupabaseStorageService storage)
         {
             _db = db;
             _mapper = mapper;
+            _storage = storage;
         }
 
         [HttpGet]
@@ -32,13 +37,28 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateProductDto dto)
+        public async Task<IActionResult> Create([FromForm] CreateProductDto dto)
         {
-            var product = _mapper.Map<Product>(dto);
-            product.IsActive = true;
+            string imageUrl = "";
+
+            if (dto.ThumbnailFile != null)
+            {
+                imageUrl = await _storage.UploadFile(dto.ThumbnailFile);
+            }
+
+            var product = new Product
+            {
+                Name = dto.Name,
+                Slug = dto.Slug,
+                Description = dto.Description,
+                Price = dto.Price,
+                CategoryId = dto.CategoryId,
+                Thumbnail = imageUrl,
+                IsActive = true
+            };
 
             _db.Products.Add(product);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
 
             return Ok(product);
         }
