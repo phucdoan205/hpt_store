@@ -1,8 +1,12 @@
+using backend.Models.Base;
+using backend.Models.Products;
+
 namespace backend.Models.Masters
 {
-    public class MasterSize
+    public class MasterSize : BaseModel
     {
-        public int Id { get; set; }
-        public required string Name { get; set; }
+        public string Name { get; set; }
+
+        public ICollection<ProductVariant> Variants { get; set; }
     }
 }
