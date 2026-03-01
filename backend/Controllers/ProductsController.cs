@@ -35,17 +35,12 @@ namespace backend.Controllers
 
             return Ok(result);
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateProductDto dto)
         {
-            string thumbnailUrl = "";
-
-            if (dto.ThumbnailFile != null)
-            {
-                thumbnailUrl =
-                    await _storage.UploadFile(dto.ThumbnailFile);
-            }
+            if (dto == null)
+                return BadRequest("Invalid data");
 
             var product = new Product
             {
@@ -54,9 +49,36 @@ namespace backend.Controllers
                 Description = dto.Description,
                 Price = dto.Price,
                 CategoryId = dto.CategoryId,
-                Thumbnail = thumbnailUrl,
-                IsActive = true
+                IsActive = true,
+                Thumbnail = "", 
+                Images = new List<ProductImage>()
             };
+
+            /* ========= THUMBNAIL ========= */
+
+            if (dto.ThumbnailFile != null)
+            {
+                var thumbUrl = await _storage.UploadFile(dto.ThumbnailFile);
+                product.Thumbnail = thumbUrl;
+            }
+
+            /* ========= MULTIPLE IMAGES ========= */
+
+            if (dto.ImageFiles != null && dto.ImageFiles.Any())
+            {
+                int order = 0;
+
+                foreach (var file in dto.ImageFiles)
+                {
+                    var imageUrl = await _storage.UploadFile(file);
+
+                    product.Images.Add(new ProductImage
+                    {
+                        ImageUrl = imageUrl,
+                        SortOrder = order++
+                    });
+                }
+            }
 
             _db.Products.Add(product);
             await _db.SaveChangesAsync();

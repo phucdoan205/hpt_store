@@ -10,5 +10,6 @@ namespace backend.DTOs.Products
         public decimal Price { get; set; }
         public int CategoryId { get; set; }
         public IFormFile? ThumbnailFile { get; set; }
+        public List<IFormFile>? ImageFiles { get; set; }
     }
 }

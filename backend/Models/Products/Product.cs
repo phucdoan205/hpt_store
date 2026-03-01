@@ -13,7 +13,7 @@ namespace backend.Models.Products
         public int CategoryId { get; set; }
         public Category Category { get; set; }
 
-        public required string Thumbnail { get; set; }
+        public string Thumbnail { get; set; }
         public bool IsActive { get; set; }
 
         public ICollection<ProductVariant> Variants { get; set; }
