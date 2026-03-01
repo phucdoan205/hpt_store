@@ -3,6 +3,7 @@ using AutoMapper;
 using backend.DTOs.Products;
 using backend.Models.Products;
 using backend.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -35,12 +36,12 @@ namespace backend.Controllers
 
             return Ok(result);
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateProductDto dto)
         {
             if (dto == null)
-                return BadRequest("Invalid data");
+                return BadRequest();
 
             var product = new Product
             {
@@ -50,40 +51,59 @@ namespace backend.Controllers
                 Price = dto.Price,
                 CategoryId = dto.CategoryId,
                 IsActive = true,
-                Thumbnail = "", 
+                Thumbnail = "",
                 Images = new List<ProductImage>()
             };
 
-            /* ========= THUMBNAIL ========= */
+            _db.Products.Add(product);
+            await _db.SaveChangesAsync();
+
+            var folder = $"product-{product.Id}";
 
             if (dto.ThumbnailFile != null)
             {
-                var thumbUrl = await _storage.UploadFile(dto.ThumbnailFile);
-                product.Thumbnail = thumbUrl;
+                product.Thumbnail =
+                    await _storage.UploadFile(dto.ThumbnailFile, folder);
             }
 
-            /* ========= MULTIPLE IMAGES ========= */
-
-            if (dto.ImageFiles != null && dto.ImageFiles.Any())
+            if (dto.ImageFiles != null)
             {
                 int order = 0;
 
                 foreach (var file in dto.ImageFiles)
                 {
-                    var imageUrl = await _storage.UploadFile(file);
+                    var url = await _storage.UploadFile(file, folder);
 
                     product.Images.Add(new ProductImage
                     {
-                        ImageUrl = imageUrl,
+                        ProductId = product.Id,
+                        ImageUrl = url,
                         SortOrder = order++
                     });
                 }
             }
 
-            _db.Products.Add(product);
             await _db.SaveChangesAsync();
 
             return Ok(product);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var product = await _db.Products
+                .Include(p => p.Images)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null)
+                return NotFound();
+
+            await _storage.DeleteFolder($"product-{id}");
+
+            _db.Products.Remove(product);
+            await _db.SaveChangesAsync();
+
+            return Ok("Deleted");
         }
     }
 }
