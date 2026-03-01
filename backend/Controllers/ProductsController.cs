@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using backend.DTOs.Products;
 using backend.Models.Products;
@@ -33,17 +32,19 @@ namespace backend.Controllers
                 .ToList();
 
             var result = _mapper.Map<List<ProductDto>>(products);
+
             return Ok(result);
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateProductDto dto)
         {
-            string imageUrl = "";
+            string thumbnailUrl = "";
 
             if (dto.ThumbnailFile != null)
             {
-                imageUrl = await _storage.UploadFile(dto.ThumbnailFile);
+                thumbnailUrl =
+                    await _storage.UploadFile(dto.ThumbnailFile);
             }
 
             var product = new Product
@@ -53,7 +54,7 @@ namespace backend.Controllers
                 Description = dto.Description,
                 Price = dto.Price,
                 CategoryId = dto.CategoryId,
-                Thumbnail = imageUrl,
+                Thumbnail = thumbnailUrl,
                 IsActive = true
             };
 

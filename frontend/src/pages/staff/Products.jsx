@@ -83,22 +83,16 @@ export default function Products() {
         form.name.toLowerCase().replace(/\s+/g, "-")
       );
       formData.append("Description", form.description);
-      formData.append("Price", form.price);
-      formData.append("CategoryId", form.categoryId);
+      formData.append("Price", Number(form.price));
+      formData.append("CategoryId", Number(form.categoryId));
 
-      // chỉ lấy ảnh đầu làm thumbnail
       if (images.length > 0) {
         formData.append("ThumbnailFile", images[0].file);
       }
 
       await axios.post(
-        "https://localhost:5001/api/products",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        "https://localhost:5173/api/products",
+        formData
       );
 
       alert("✅ Tạo sản phẩm thành công");
@@ -106,11 +100,10 @@ export default function Products() {
       resetForm();
       setOpen(false);
     } catch (err) {
-      console.error(err);
-      alert("❌ Lỗi tạo sản phẩm");
+      console.log(err.response?.data);
+      alert("❌ Không thể tạo sản phẩm");
     }
   };
-
   /* ================= STYLE ================= */
 
   const inputStyle =

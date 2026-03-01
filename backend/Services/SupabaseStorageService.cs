@@ -1,7 +1,5 @@
-using Microsoft.AspNetCore.Http;
 using Supabase;
-using Supabase.Storage;
-using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace backend.Services
 {
@@ -25,6 +23,7 @@ namespace backend.Services
 
             using var ms = new MemoryStream();
             await file.CopyToAsync(ms);
+
             var bytes = ms.ToArray();
 
             await _client.Storage
