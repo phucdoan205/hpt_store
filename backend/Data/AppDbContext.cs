@@ -1,33 +1,38 @@
 using Microsoft.EntityFrameworkCore;
-using backend.Models.Cart;
-using backend.Models.Masters;
-using backend.Models.Orders;
-using backend.Models.Products;
 using backend.Models.Users;
+using backend.Models.Promotions;
+using backend.Models.Cart;
+using backend.Models.Orders;
+
 
 public class AppDbContext : DbContext
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
-
-    public DbSet<User> Users => Set<User>();
-    public DbSet<UserAddress> UserAddresses => Set<UserAddress>();
-
-    public DbSet<Category> Categories => Set<Category>();
-    public DbSet<Product> Products => Set<Product>();
-    public DbSet<ProductVariant> ProductVariants => Set<ProductVariant>();
-    public DbSet<ProductImage> ProductImages => Set<ProductImage>();
-
-    public DbSet<Order> Orders => Set<Order>();
-    public DbSet<OrderDetail> OrderDetails => Set<OrderDetail>();
-
-    public DbSet<CartItem> CartItems => Set<CartItem>();
-    public DbSet<MasterColor> MasterColors => Set<MasterColor>();
-    public DbSet<MasterSize> MasterSizes => Set<MasterSize>();
-
-    protected override void OnModelCreating(ModelBuilder b)
+    public AppDbContext(DbContextOptions<AppDbContext> options)
+        : base(options)
     {
-        b.Entity<User>().ToTable("Users");
-        b.Entity<Product>().ToTable("Products");
-        b.Entity<Order>().ToTable("Orders");
+    }
+
+    // Identity
+    public DbSet<User> Users { get; set; }
+
+    // Promotions
+    public DbSet<Coupon> Coupons { get; set; }
+    public DbSet<UserCoupon> UserCoupons { get; set; }
+
+    // Shopping
+    public DbSet<Cart> Carts { get; set; }
+    public DbSet<CartItem> CartItems { get; set; }
+
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderDetail> OrderDetails { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        // Apply all configuration classes automatically
+        builder.ApplyConfigurationsFromAssembly(
+            typeof(AppDbContext).Assembly
+        );
     }
 }
