@@ -39,7 +39,9 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] CreateProductDto dto)
+            [HttpPost]
+            [Consumes("multipart/form-data")]
+            public async Task<IActionResult> Create([FromForm] CreateProductDto dto)
         {
             if (dto == null)
                 return BadRequest();
@@ -89,7 +91,7 @@ namespace backend.Controllers
             return Ok(product);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var product = await _db.Products
