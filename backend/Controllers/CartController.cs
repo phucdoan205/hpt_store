@@ -1,41 +1,51 @@
-// using Microsoft.AspNetCore.Mvc;
-// using backend.DTOs.Cart;
-// using backend.Models.Cart;
+using Microsoft.AspNetCore.Mvc;
+using backend.DTOs.Shopping.Cart;
+using backend.Models.Cart;
 
-// namespace backend.Controllers
-// {
-//     [ApiController]
-//     [Route("api/cart")]
-//     public class CartController : ControllerBase
-//     {
-//         private readonly AppDbContext _db;
+namespace backend.Controllers
+{
+    [ApiController]
+    [Route("api/cart")]
+    public class CartController : ControllerBase
+    {
+        private readonly AppDbContext _db;
 
-//         public CartController(AppDbContext db)
-//         {
-//             _db = db;
-//         }
+        public CartController(AppDbContext db)
+        {
+            _db = db;
+        }
 
-//         [HttpPost("add")]
-//         public IActionResult Add(AddToCartDto dto)
-//         {
-//             var cart = new CartItem
-//             {
-//                 UserId = 1,
-//                 ProductId = dto.ProductId,
-//                 ProductVariantId = dto.ProductVariantId,
-//                 Quantity = dto.Quantity
-//             };
+        [HttpPost("add")]
+        public async Task<IActionResult> Add(AddToCartRequestDto dto)
+        {
+            var sub = User.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub)?.Value;
+            var userId = sub != null ? Guid.Parse(sub) : Guid.Empty;
 
-//             _db.CartItems.Add(cart);
-//             _db.SaveChanges();
+            var cartEntity = _db.Carts.FirstOrDefault(c => c.UserId == userId);
+            if (cartEntity == null)
+            {
+                cartEntity = new Cart { UserId = userId };
+                _db.Carts.Add(cartEntity);
+                _db.SaveChanges();
+            }
 
-//             return Ok(cart);
-//         }
+            var cartItem = new CartItem
+            {
+                CartId = cartEntity.Id,
+                ProductVariantId = dto.ProductId,
+                Quantity = dto.Quantity
+            };
 
-//         [HttpGet]
-//         public IActionResult GetCart()
-//         {
-//             return Ok(_db.CartItems.ToList());
-//         }
-//     }
-// }
+            _db.CartItems.Add(cartItem);
+            _db.SaveChanges();
+
+            return Ok(cartItem);
+        }
+
+        [HttpGet]
+        public IActionResult GetCart()
+        {
+            return Ok(_db.CartItems.ToList());
+        }
+    }
+}

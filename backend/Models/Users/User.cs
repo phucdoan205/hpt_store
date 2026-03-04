@@ -29,6 +29,8 @@ namespace backend.Models.Users
 
         public bool IsLocked { get; set; }
 
+        public string Role { get; set; } = "User";
+
         // Navigation
         public ICollection<Order> Orders { get; set; }
         public ICollection<ProductReview> Reviews { get; set; }

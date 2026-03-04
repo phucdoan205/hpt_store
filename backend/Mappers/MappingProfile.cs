@@ -1,11 +1,15 @@
 using AutoMapper;
 using backend.DTOs.Products;
-using backend.DTOs.Orders;
 using backend.Models.Products;
+using backend.DTOs.Catalog.Product;
+using backend.DTOs.Shopping.Order;
 using backend.Models.Orders;
+
 using backend.DTOs.Users;
 using backend.Models.Users;
+
 using backend.DTOs.Auth;
+using backend.DTOs.Admin;
 
 namespace backend.Mappers
 {
@@ -13,22 +17,22 @@ namespace backend.Mappers
     {
         public MappingProfile()
         {
-            // PRODUCTS
-            CreateMap<Product, ProductDto>();
-            CreateMap<CreateProductDto, Product>();
-            CreateMap<UpdateProductDto, Product>();
+            CreateMap<Product, ProductResponseDto>();
+            CreateMap<CreateProductRequestDto, Product>();
+            CreateMap<UpdateProductRequestDto, Product>();
 
             CreateMap<ProductVariant, ProductVariantDto>();
             CreateMap<ProductImage, ProductImageDto>();
 
-            // ORDERS
-            CreateMap<Order, OrderDto>();
-            CreateMap<CreateOrderDto, Order>();
+
+            CreateMap<Order, OrderResponseDto>();
+            CreateMap<CreateOrderRequestDto, Order>();
+
             CreateMap<OrderDetail, OrderDetailDto>();
 
-            // USERS
-            CreateMap<User, UserDto>();
-            CreateMap<CreateStaffDto, User>();
+
+            CreateMap<User, UserProfileDto>();
+            CreateMap<CreateStaffRequestDto, User>();
         }
     }
 }

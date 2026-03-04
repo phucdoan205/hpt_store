@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using backend.DTOs.Products;
+using backend.DTOs.Catalog.Product;
 using backend.Models.Products;
 using backend.Services;
 using Microsoft.EntityFrameworkCore;
@@ -26,13 +27,13 @@ namespace backend.Controllers
         }
 
        [HttpGet]
-       public IActionResult GetAll()
+      public IActionResult GetAll()
         {
             var products = _db.Products
                 .Where(x => x.IsActive)
                  .ToList();
 
-            var result = _mapper.Map<List<ProductDto>>(products);
+          var result = _mapper.Map<List<ProductResponseDto>>(products);
 
             return Ok(result);
         }
@@ -89,7 +90,7 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var product = await _db.Products
                 .Include(p => p.Images)

@@ -16,7 +16,6 @@ namespace backend.Models.Products
         public string Thumbnail { get; set; }
         public bool IsActive { get; set; }
 
-        // Navigation
         public ICollection<ProductVariant> Variants { get; set; }
         public ICollection<ProductImage> Images { get; set; }
         public ICollection<ProductReview> Reviews { get; set; }
