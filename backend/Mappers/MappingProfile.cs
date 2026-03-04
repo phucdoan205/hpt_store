@@ -2,6 +2,7 @@ using AutoMapper;
 using backend.DTOs.Products;
 using backend.Models.Products;
 using backend.DTOs.Catalog.Product;
+using backend.DTOs.Catalog.Category;
 using backend.DTOs.Shopping.Order;
 using backend.Models.Orders;
 
@@ -24,14 +25,18 @@ namespace backend.Mappers
             CreateMap<ProductVariant, ProductVariantDto>();
             CreateMap<ProductImage, ProductImageDto>();
 
+            CreateMap<Category, CategoryResponseDto>();
+            CreateMap<CreateCategoryRequestDto, Category>();
 
             CreateMap<Order, OrderResponseDto>();
             CreateMap<CreateOrderRequestDto, Order>();
 
             CreateMap<OrderDetail, OrderDetailDto>();
 
-
+            CreateMap<User, UserResponseDto>();
             CreateMap<User, UserProfileDto>();
+            CreateMap<CreateUserRequestDto, User>();
+            CreateMap<UpdateUserRequestDto, User>();
             CreateMap<CreateStaffRequestDto, User>();
         }
     }
