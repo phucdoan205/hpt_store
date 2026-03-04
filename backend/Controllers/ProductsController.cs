@@ -212,5 +212,31 @@ namespace backend.Controllers
 
             return Ok("SoftDeleted");
         }
+
+        [HttpPatch("{id:guid}/restore")]
+        public async Task<IActionResult> Restore(Guid id)
+        {
+            try
+            {
+                var product = await _db.Products
+                    .FirstOrDefaultAsync(p => p.Id == id && !p.IsActive);
+
+                if (product == null)
+                    return NotFound(new { success = false, message = "Deleted product not found" });
+
+                product.IsActive = true;
+                product.UpdatedAt = DateTime.UtcNow;
+
+                _db.Products.Update(product);
+                await _db.SaveChangesAsync();
+
+                var result = _mapper.Map<ProductResponseDto>(product);
+                return Ok(new { success = true, message = "Product restored successfully", data = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
     }
 }

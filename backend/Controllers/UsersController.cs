@@ -40,11 +40,14 @@ namespace backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public IActionResult GetById(string id)
         {
             try
             {
-                var user = _db.Users.FirstOrDefault(x => x.Id == id && !x.IsDeleted);
+                if (!Guid.TryParse(id, out var guidId))
+                    return BadRequest(new { success = false, message = "Invalid ID format" });
+                    
+                var user = _db.Users.FirstOrDefault(x => x.Id == guidId && !x.IsDeleted);
                 if (user == null)
                     return NotFound(new { success = false, message = "User not found" });
 
@@ -97,11 +100,14 @@ namespace backend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateUserRequestDto dto)
+        public async Task<IActionResult> Update(string id, [FromBody] UpdateUserRequestDto dto)
         {
             try
             {
-                var user = _db.Users.FirstOrDefault(x => x.Id == id && !x.IsDeleted);
+                if (!Guid.TryParse(id, out var guidId))
+                    return BadRequest(new { success = false, message = "Invalid ID format" });
+                    
+                var user = _db.Users.FirstOrDefault(x => x.Id == guidId && !x.IsDeleted);
                 if (user == null)
                     return NotFound(new { success = false, message = "User not found" });
 
@@ -138,11 +144,14 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
             try
             {
-                var user = _db.Users.FirstOrDefault(x => x.Id == id && !x.IsDeleted);
+                if (!Guid.TryParse(id, out var guidId))
+                    return BadRequest(new { success = false, message = "Invalid ID format" });
+                    
+                var user = _db.Users.FirstOrDefault(x => x.Id == guidId && !x.IsDeleted);
                 if (user == null)
                     return NotFound(new { success = false, message = "User not found" });
 
@@ -153,6 +162,33 @@ namespace backend.Controllers
                 await _db.SaveChangesAsync();
 
                 return Ok(new { success = true, message = "User deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpPatch("{id}/restore")]
+        public async Task<IActionResult> Restore(string id)
+        {
+            try
+            {
+                if (!Guid.TryParse(id, out var guidId))
+                    return BadRequest(new { success = false, message = "Invalid ID format" });
+                    
+                var user = _db.Users.FirstOrDefault(x => x.Id == guidId && x.IsDeleted);
+                if (user == null)
+                    return NotFound(new { success = false, message = "Deleted user not found" });
+
+                user.IsDeleted = false;
+                user.UpdatedAt = DateTime.UtcNow;
+
+                _db.Users.Update(user);
+                await _db.SaveChangesAsync();
+
+                var result = _mapper.Map<UserResponseDto>(user);
+                return Ok(new { success = true, message = "User restored successfully", data = result });
             }
             catch (Exception ex)
             {

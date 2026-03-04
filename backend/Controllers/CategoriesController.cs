@@ -149,6 +149,31 @@ namespace backend.Controllers
                 return StatusCode(500, new { success = false, message = ex.Message });
             }
         }
+
+        [HttpPatch("{id}/restore")]
+        public async Task<IActionResult> Restore(int id)
+        {
+            try
+            {
+                var category = _db.Categories.FirstOrDefault(x => x.Id == id && x.IsDeleted);
+                if (category == null)
+                    return NotFound(new { success = false, message = "Deleted category not found" });
+
+                category.IsDeleted = false;
+                category.UpdatedAt = DateTime.UtcNow;
+
+                _db.Categories.Update(category);
+                await _db.SaveChangesAsync();
+
+                var result = _mapper.Map<CategoryResponseDto>(category);
+                return Ok(new { success = true, message = "Category restored successfully", data = result });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = ex.Message });
+            }
+        }
+
         private string GenerateSlug(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
