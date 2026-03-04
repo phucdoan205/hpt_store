@@ -79,6 +79,85 @@ namespace backend.Migrations
                     b.ToTable("CartItems");
                 });
 
+            modelBuilder.Entity("backend.Models.Content.Article", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("PublishedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Summary")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Thumbnail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Articles");
+                });
+
+            modelBuilder.Entity("backend.Models.Content.ArticleCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ArticleCategories");
+                });
+
             modelBuilder.Entity("backend.Models.Masters.MasterColor", b =>
                 {
                     b.Property<Guid>("Id")
@@ -104,7 +183,7 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MasterColor");
+                    b.ToTable("MasterColors");
                 });
 
             modelBuilder.Entity("backend.Models.Masters.MasterSize", b =>
@@ -128,7 +207,7 @@ namespace backend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MasterSize");
+                    b.ToTable("MasterSizes");
                 });
 
             modelBuilder.Entity("backend.Models.Orders.Order", b =>
@@ -241,6 +320,48 @@ namespace backend.Migrations
                     b.ToTable("OrderDetails");
                 });
 
+            modelBuilder.Entity("backend.Models.Orders.OrderStatusHistory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NewStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PreviousStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UpdatedBy")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderStatusHistories");
+                });
+
             modelBuilder.Entity("backend.Models.Products.Category", b =>
                 {
                     b.Property<Guid>("Id")
@@ -274,7 +395,7 @@ namespace backend.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("backend.Models.Products.Product", b =>
@@ -395,7 +516,7 @@ namespace backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ProductReview");
+                    b.ToTable("ProductReviews");
                 });
 
             modelBuilder.Entity("backend.Models.Products.ProductVariant", b =>
@@ -480,6 +601,9 @@ namespace backend.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<Guid?>("PromotionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -494,7 +618,119 @@ namespace backend.Migrations
                     b.HasIndex("Code")
                         .IsUnique();
 
+                    b.HasIndex("PromotionId");
+
                     b.ToTable("Coupons");
+                });
+
+            modelBuilder.Entity("backend.Models.Promotions.ProductPromotion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PromotionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("PromotionId");
+
+                    b.ToTable("ProductPromotions");
+                });
+
+            modelBuilder.Entity("backend.Models.Promotions.Promotion", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DiscountType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DiscountValue")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Promotions");
+                });
+
+            modelBuilder.Entity("backend.Models.Promotions.PromotionCondition", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Field")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Operator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PromotionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PromotionId");
+
+                    b.ToTable("PromotionConditions");
                 });
 
             modelBuilder.Entity("backend.Models.Promotions.UserCoupon", b =>
@@ -571,7 +807,7 @@ namespace backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notification");
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("backend.Models.Users.User", b =>
@@ -686,7 +922,7 @@ namespace backend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserAddress");
+                    b.ToTable("UserAddresses");
                 });
 
             modelBuilder.Entity("backend.Models.Cart.Cart", b =>
@@ -719,6 +955,17 @@ namespace backend.Migrations
                     b.Navigation("ProductVariant");
                 });
 
+            modelBuilder.Entity("backend.Models.Content.Article", b =>
+                {
+                    b.HasOne("backend.Models.Content.ArticleCategory", "Category")
+                        .WithMany("Articles")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("backend.Models.Orders.Order", b =>
                 {
                     b.HasOne("backend.Models.Users.User", "User")
@@ -734,6 +981,17 @@ namespace backend.Migrations
                 {
                     b.HasOne("backend.Models.Orders.Order", "Order")
                         .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("backend.Models.Orders.OrderStatusHistory", b =>
+                {
+                    b.HasOne("backend.Models.Orders.Order", "Order")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -826,6 +1084,43 @@ namespace backend.Migrations
                     b.Navigation("Size");
                 });
 
+            modelBuilder.Entity("backend.Models.Promotions.Coupon", b =>
+                {
+                    b.HasOne("backend.Models.Promotions.Promotion", null)
+                        .WithMany("Coupons")
+                        .HasForeignKey("PromotionId");
+                });
+
+            modelBuilder.Entity("backend.Models.Promotions.ProductPromotion", b =>
+                {
+                    b.HasOne("backend.Models.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backend.Models.Promotions.Promotion", "Promotion")
+                        .WithMany("ProductPromotions")
+                        .HasForeignKey("PromotionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Promotion");
+                });
+
+            modelBuilder.Entity("backend.Models.Promotions.PromotionCondition", b =>
+                {
+                    b.HasOne("backend.Models.Promotions.Promotion", "Promotion")
+                        .WithMany("Conditions")
+                        .HasForeignKey("PromotionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Promotion");
+                });
+
             modelBuilder.Entity("backend.Models.Promotions.UserCoupon", b =>
                 {
                     b.HasOne("backend.Models.Promotions.Coupon", "Coupon")
@@ -872,6 +1167,11 @@ namespace backend.Migrations
                     b.Navigation("Items");
                 });
 
+            modelBuilder.Entity("backend.Models.Content.ArticleCategory", b =>
+                {
+                    b.Navigation("Articles");
+                });
+
             modelBuilder.Entity("backend.Models.Masters.MasterColor", b =>
                 {
                     b.Navigation("Variants");
@@ -904,6 +1204,15 @@ namespace backend.Migrations
             modelBuilder.Entity("backend.Models.Promotions.Coupon", b =>
                 {
                     b.Navigation("UserCoupons");
+                });
+
+            modelBuilder.Entity("backend.Models.Promotions.Promotion", b =>
+                {
+                    b.Navigation("Conditions");
+
+                    b.Navigation("Coupons");
+
+                    b.Navigation("ProductPromotions");
                 });
 
             modelBuilder.Entity("backend.Models.Users.User", b =>
