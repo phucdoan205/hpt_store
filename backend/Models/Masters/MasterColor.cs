@@ -1,9 +1,13 @@
+using backend.Models.Base;
+using backend.Models.Products;
+
 namespace backend.Models.Masters
 {
-    public class MasterColor
+    public class MasterColor : BaseModel
     {
-        public int Id { get; set; }
-        public required string Name { get; set; }
-        public required string HexCode { get; set; }
+        public string Name { get; set; }
+        public string HexCode { get; set; }
+
+        public ICollection<ProductVariant> Variants { get; set; }
     }
 }

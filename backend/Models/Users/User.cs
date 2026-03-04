@@ -1,25 +1,39 @@
 using backend.Models.Orders;
+using backend.Models.Products;
+using backend.Models.Base;
+using backend.Models.Promotions;
 
 namespace backend.Models.Users
 {
-    public class User
+    public class User : BaseModel
     {
-        public int Id { get; set; }
+        public string Username { get; set; }
+        public string PasswordHash { get; set; }
 
-        public required string Username { get; set; }
-        public required string PasswordHash { get; set; }
-        public required string Email { get; set; }
+        public string Email { get; set; }
+
+        public string? FullName { get; set; }
+
+        public string? PhoneNumber { get; set; }
+        public string? AvatarUrl { get; set; }
+
+        public DateTime? DateOfBirth { get; set; }
 
         public string? GoogleId { get; set; }
-        public required string FullName { get; set; }
-        public required string PhoneNumber { get; set; }
-        public required string AvatarUrl { get; set; }
 
-        public required string Role { get; set; } // Admin | Staff | User
+        public bool IsEmailVerified { get; set; }
+
+        public string? RefreshToken { get; set; }
+
+        public DateTime? RefreshTokenExpiry { get; set; }
+
         public bool IsLocked { get; set; }
-        public DateTime CreatedAt { get; set; }
 
-        public ICollection<UserAddress> Addresses { get; set; }
+        // Navigation
         public ICollection<Order> Orders { get; set; }
+        public ICollection<ProductReview> Reviews { get; set; }
+        public ICollection<UserAddress> Addresses { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
+        public ICollection<UserCoupon> UserCoupons { get; set; }
     }
 }

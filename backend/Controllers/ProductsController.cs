@@ -25,12 +25,12 @@ namespace backend.Controllers
             _storage = storage;
         }
 
-        [HttpGet]
-        public IActionResult GetAll()
+       [HttpGet]
+       public IActionResult GetAll()
         {
             var products = _db.Products
                 .Where(x => x.IsActive)
-                .ToList();
+                 .ToList();
 
             var result = _mapper.Map<List<ProductDto>>(products);
 

@@ -1,41 +1,41 @@
-using Microsoft.AspNetCore.Mvc;
-using backend.DTOs.Cart;
-using backend.Models.Cart;
+// using Microsoft.AspNetCore.Mvc;
+// using backend.DTOs.Cart;
+// using backend.Models.Cart;
 
-namespace backend.Controllers
-{
-    [ApiController]
-    [Route("api/cart")]
-    public class CartController : ControllerBase
-    {
-        private readonly AppDbContext _db;
+// namespace backend.Controllers
+// {
+//     [ApiController]
+//     [Route("api/cart")]
+//     public class CartController : ControllerBase
+//     {
+//         private readonly AppDbContext _db;
 
-        public CartController(AppDbContext db)
-        {
-            _db = db;
-        }
+//         public CartController(AppDbContext db)
+//         {
+//             _db = db;
+//         }
 
-        [HttpPost("add")]
-        public IActionResult Add(AddToCartDto dto)
-        {
-            var cart = new CartItem
-            {
-                UserId = 1,
-                ProductId = dto.ProductId,
-                ProductVariantId = dto.ProductVariantId,
-                Quantity = dto.Quantity
-            };
+//         [HttpPost("add")]
+//         public IActionResult Add(AddToCartDto dto)
+//         {
+//             var cart = new CartItem
+//             {
+//                 UserId = 1,
+//                 ProductId = dto.ProductId,
+//                 ProductVariantId = dto.ProductVariantId,
+//                 Quantity = dto.Quantity
+//             };
 
-            _db.CartItems.Add(cart);
-            _db.SaveChanges();
+//             _db.CartItems.Add(cart);
+//             _db.SaveChanges();
 
-            return Ok(cart);
-        }
+//             return Ok(cart);
+//         }
 
-        [HttpGet]
-        public IActionResult GetCart()
-        {
-            return Ok(_db.CartItems.ToList());
-        }
-    }
-}
+//         [HttpGet]
+//         public IActionResult GetCart()
+//         {
+//             return Ok(_db.CartItems.ToList());
+//         }
+//     }
+// }

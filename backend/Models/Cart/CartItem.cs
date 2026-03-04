@@ -1,14 +1,19 @@
+using backend.Models.Base;
+using backend.Models.Products;
+
 namespace backend.Models.Cart
 {
-    public class CartItem
+    public class CartItem : BaseModel
     {
-        public int Id { get; set; }
+        public Guid CartId { get; set; }
+        public Cart Cart { get; set; }
 
-        public int UserId { get; set; }
-        public int ProductId { get; set; }
-        public int ProductVariantId { get; set; }
+        public Guid ProductVariantId { get; set; }
+        public ProductVariant ProductVariant { get; set; }
 
         public int Quantity { get; set; }
-    }
 
+        // // Snapshot để tránh sai lệch nếu giá thay đổi
+        // public decimal UnitPrice { get; set; }
+    }
 }

@@ -12,7 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<SupabaseStorageService>();
 
 builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")?? throw new InvalidOperationException("Connection string not found")));
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
