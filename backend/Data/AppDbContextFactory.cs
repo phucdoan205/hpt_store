@@ -14,9 +14,11 @@ public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 
         var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
 
-        optionsBuilder.UseNpgsql(
-            configuration.GetConnectionString("Supabase")
-        );
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+
+        //optionsBuilder.UseNpgsql(
+        //    configuration.GetConnectionString("Supabase")
+        //);
 
         return new AppDbContext(optionsBuilder.Options);
     }

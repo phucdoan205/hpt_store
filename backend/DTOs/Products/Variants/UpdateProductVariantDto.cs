@@ -1,11 +1,15 @@
-namespace backend.DTOs.Products
+namespace backend.DTOs.Products.Variants
 {
-    public class ProductVariantDto
+    public class UpdateProductVariantDto
     {
         public int Id { get; set; }
+
         public int ProductId { get; set; }
+
         public int ColorId { get; set; }
+
         public int SizeId { get; set; }
+
         public required string Sku { get; set; }
         public int Quantity { get; set; }
         public decimal PriceModifier { get; set; }

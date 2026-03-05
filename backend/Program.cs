@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using backend.Mappers;
+using OfficeOpenXml;
 
 
 
@@ -10,8 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("Supabase")));
+builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+//builder.Services.AddDbContext<AppDbContext>(opt =>
+//    opt.UseNpgsql(builder.Configuration.GetConnectionString("Supabase")));
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
@@ -43,6 +46,9 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddCors(o =>
     o.AddPolicy("cors", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
+// Thêm license non-commercial của EPPlus
+ExcelPackage.License.SetNonCommercialPersonal("HPT");
 
 var app = builder.Build();
 
