@@ -21,25 +21,83 @@ export default function Login() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-20 border p-6 rounded">
-      <h2 className="text-xl font-bold mb-4">Đăng nhập</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      {/* KHUNG */}
+      <div className="w-full max-w-md bg-white border-2 border-blue-700 p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300">
+        {/* TIÊU ĐỀ */}
+        <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">
+          ĐĂNG NHẬP
+        </h2>
 
-      <form onSubmit={submit}>
-        <input
-          className="input"
-          placeholder="Email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          className="input mt-3"
-          placeholder="Mật khẩu"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button className="btn mt-4 w-full">Đăng nhập</button>
-      </form>
+        <form onSubmit={submit} className="flex flex-col gap-4">
+          {/* EMAIL */}
+          <input
+            type="email"
+            placeholder="Email"
+            className="
+              w-full
+              border-2 border-blue-700
+              rounded-lg
+              px-4 py-2
+              text-blue-700
+              placeholder-blue-700/60
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-700
+              hover:bg-blue-50
+              transition-colors
+            "
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-      <GoogleLoginButton />
+          {/* PASSWORD */}
+          <input
+            type="password"
+            placeholder="Mật khẩu"
+            className="
+              w-full
+              border-2 border-blue-700
+              rounded-lg
+              px-4 py-2
+              text-blue-700
+              placeholder-blue-700/60
+              focus:outline-none
+              focus:ring-2
+              focus:ring-blue-700
+              hover:bg-blue-50
+              transition-colors
+            "
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          {/* LOGIN BUTTON */}
+          <button
+            type="submit"
+            className="
+              w-full
+              mt-2
+              bg-blue-700
+              text-white
+              font-semibold
+              py-2
+              rounded-lg
+              border-2
+              border-blue-700
+              hover:bg-blue-800
+              hover:border-blue-800
+              transition-colors
+            "
+          >
+            Đăng nhập
+          </button>
+        </form>
+        {/* GOOGLE LOGIN */}
+        <div className="mt-4">
+          <GoogleLoginButton />
+        </div>
+      </div>
     </div>
   );
 }
