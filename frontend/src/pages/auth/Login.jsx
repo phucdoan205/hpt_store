@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "../../services/authService";
 import { useAuth } from "../../auth/AuthContext";
-import GoogleLoginButton from "../../components/GoogleLoginButton";
+import GoogleLoginButton from "../../components/common/GoogleLoginButton";
 
 export default function Login() {
   const [email, setEmail] = useState("");

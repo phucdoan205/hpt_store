@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-export default function ChatBot() {
+const ChatBot = () => {
   useEffect(() => {
     if (window.Tawk_API) return;
 
@@ -17,3 +17,4 @@ export default function ChatBot() {
 
   return null;
 }
+export default ChatBot;
