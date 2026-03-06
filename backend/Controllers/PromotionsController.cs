@@ -19,7 +19,6 @@ namespace backend.Controllers
             _mapper = mapper;
         }
 
-        // Coupons
         [HttpGet("coupons")]
         public IActionResult GetCoupons()
         {
@@ -83,7 +82,6 @@ namespace backend.Controllers
             return NoContent();
         }
 
-        // UserCoupons
         [HttpGet("user-coupons")]
         public IActionResult GetUserCoupons()
         {
@@ -115,7 +113,18 @@ namespace backend.Controllers
         public IActionResult CreateUserCoupon(CreateUserCouponDto dto)
         {
             if (dto == null)
-                return BadRequest();
+                return BadRequest(new { success = false, message = "Request body is required" });
+
+            var userExists = _db.Users.Any(u => u.Id == dto.UserId && !u.IsDeleted);
+            if (!userExists)
+                return NotFound(new { success = false, message = "User not found" });
+
+            var couponExists = _db.Coupons.Any(c => c.Id == dto.CouponId);
+            if (!couponExists)
+                return NotFound(new { success = false, message = "Coupon not found" });
+
+            if (_db.UserCoupons.Any(uc => uc.UserId == dto.UserId && uc.CouponId == dto.CouponId))
+                return BadRequest(new { success = false, message = "This user already has the coupon" });
 
             var userCoupon = _mapper.Map<UserCoupon>(dto);
             _db.UserCoupons.Add(userCoupon);

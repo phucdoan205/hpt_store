@@ -13,11 +13,5 @@ namespace backend.DTOs.Products
         public IFormFile[]? ImageFiles { get; set; }
 
         public bool? IsActive { get; set; }
-
-        public bool UseColors { get; set; }
-        public Guid[]? ColorIds { get; set; }
-
-        public bool UseSizes { get; set; }
-        public string[]? SizeNames { get; set; }
     }
 }

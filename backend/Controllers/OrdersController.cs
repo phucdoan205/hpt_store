@@ -22,14 +22,37 @@ namespace backend.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateOrderRequestDto dto)
         {
-            var order = _mapper.Map<Order>(dto);
+            if (dto == null)
+                return BadRequest(new { success = false, message = "Request body is required" });
+
             var sub = User.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub)?.Value;
-            order.UserId = sub != null ? Guid.Parse(sub) : Guid.Empty;
+            if (string.IsNullOrEmpty(sub) || !Guid.TryParse(sub, out var userId))
+                return Unauthorized(new { success = false, message = "User not authenticated" });
+
+            var user = await _db.Users.FindAsync(userId);
+            if (user == null || user.IsDeleted)
+                return Unauthorized(new { success = false, message = "User not found" });
+
+            var order = _mapper.Map<Order>(dto);
+            order.UserId = userId;
             order.OrderDate = DateTime.UtcNow;
             order.Status = "Pending";
+            order.OrderCode = Guid.NewGuid().ToString();
+
+            order.ShippingName = user.FullName ?? user.Username;
+            order.ShippingPhone = user.PhoneNumber ?? string.Empty;
+            order.ShippingAddress = dto.ShippingAddress;
+
+            order.PaymentStatus = "Unpaid";
+            order.TotalAmount = 0m;
+            order.DiscountAmount = 0m;
+            order.ShippingFee = 0m;
+            order.FinalAmount = 0m;
+
+            order.PaymentMethod = dto.PaymentMethod;
 
             _db.Orders.Add(order);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
 
             return Ok(order);
         }

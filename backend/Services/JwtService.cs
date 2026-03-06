@@ -23,21 +23,30 @@ public class JwtService
             new Claim(JwtRegisteredClaimNames.UniqueName, user.Username)
         };
 
-        var key = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+            var keyString = _config["Jwt:Key"] ??
+                throw new InvalidOperationException("JWT key is missing from configuration");
 
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var keyBytes = Encoding.UTF8.GetBytes(keyString);
 
-        var token = new JwtSecurityToken(
-            issuer: _config["Jwt:Issuer"],
-            audience: _config["Jwt:Audience"],
-            claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(
-                int.Parse(_config["Jwt:ExpireMinutes"])),
-            signingCredentials: creds
-        );
+            if (keyBytes.Length < 32)
+            {
+                using var sha = SHA256.Create();
+                keyBytes = sha.ComputeHash(keyBytes);
+            }
 
-        return new JwtSecurityTokenHandler().WriteToken(token);
+            var key = new SymmetricSecurityKey(keyBytes);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(
+                    int.Parse(_config["Jwt:ExpireMinutes"])),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
     public string GenerateRefreshToken()

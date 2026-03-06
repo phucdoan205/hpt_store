@@ -18,15 +18,32 @@ namespace backend.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> Add(AddToCartRequestDto dto)
         {
+            if (dto == null)
+                return BadRequest(new { success = false, message = "Request body is required" });
+
             var sub = User.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub)?.Value;
-            var userId = sub != null ? Guid.Parse(sub) : Guid.Empty;
+            if (string.IsNullOrEmpty(sub) || !Guid.TryParse(sub, out var userId))
+                return Unauthorized(new { success = false, message = "User not authenticated" });
+
+            var variantExists = _db.ProductVariants.Any(v => v.Id == dto.ProductId);
+            if (!variantExists)
+                return NotFound(new { success = false, message = "Product variant not found" });
 
             var cartEntity = _db.Carts.FirstOrDefault(c => c.UserId == userId);
             if (cartEntity == null)
             {
                 cartEntity = new Cart { UserId = userId };
                 _db.Carts.Add(cartEntity);
-                _db.SaveChanges();
+                await _db.SaveChangesAsync();
+            }
+
+            var existingItem = _db.CartItems.FirstOrDefault(ci => ci.CartId == cartEntity.Id && ci.ProductVariantId == dto.ProductId);
+            if (existingItem != null)
+            {
+                existingItem.Quantity += dto.Quantity;
+                _db.CartItems.Update(existingItem);
+                await _db.SaveChangesAsync();
+                return Ok(existingItem);
             }
 
             var cartItem = new CartItem
@@ -37,7 +54,7 @@ namespace backend.Controllers
             };
 
             _db.CartItems.Add(cartItem);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
 
             return Ok(cartItem);
         }
@@ -45,7 +62,15 @@ namespace backend.Controllers
         [HttpGet]
         public IActionResult GetCart()
         {
-            return Ok(_db.CartItems.ToList());
+            var sub = User.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub)?.Value;
+            if (string.IsNullOrEmpty(sub) || !Guid.TryParse(sub, out var userId))
+                return Unauthorized(new { success = false, message = "User not authenticated" });
+
+            var cartItems = _db.CartItems
+                .Where(ci => ci.Cart.UserId == userId)
+                .ToList();
+
+            return Ok(cartItems);
         }
     }
 }
